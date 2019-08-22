@@ -1,0 +1,208 @@
+﻿<Window x:Class="OctTools.frm_Import"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:OctTools"
+        mc:Ignorable="d"
+        Title="frm_Import" Height="650" Width="850" WindowStyle="None" 
+        ResizeMode="NoResize" WindowStartupLocation="CenterScreen" FontSize="8" Loaded="Window_Loaded" AllowsTransparency="True" Activated="Window_Activated" >
+    <Window.Background>
+        <ImageBrush ImageSource="Pict/SelectFile02.png"/>
+    </Window.Background>
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="69"/>
+            <RowDefinition Height="8"/>
+            <RowDefinition Height="69"/>
+            <RowDefinition Height="8"/>
+            <RowDefinition Height="40"/>
+            <RowDefinition Height="40"/>
+            <RowDefinition Height="40"/>
+            <RowDefinition Height="60"/>
+            <RowDefinition Height="8"/>
+            <RowDefinition Height="40"/>
+            <RowDefinition Height="6"/>
+            <RowDefinition Height="40"/>
+            <RowDefinition Height="40"/>
+            <RowDefinition Height="40"/>
+            <RowDefinition Height="10"/>
+            <RowDefinition Height="40"/>
+            <RowDefinition Height="36"/>
+            <RowDefinition/>
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="116"/>
+            <ColumnDefinition Width="93"/>
+            <ColumnDefinition Width="430"/>
+            <ColumnDefinition Width="118"/>
+            <ColumnDefinition Width="93*"/>
+        </Grid.ColumnDefinitions>
+
+        <!-- 标题1 -->
+        <Grid Margin="0" Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="5" >
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="81*"/>
+                <ColumnDefinition Width="971*"/>
+                <ColumnDefinition Width="64*"/>
+                <ColumnDefinition Width="56*"/>
+                <ColumnDefinition Width="28*"/>
+            </Grid.ColumnDefinitions>
+            <Viewbox Margin="2" Grid.Column="1" HorizontalAlignment="Left" >
+                <TextBlock Margin="6,10,0,3" Text="数据导入功能" Foreground="White" />
+            </Viewbox>
+            <Viewbox  Margin="10,10,10,22" Grid.Column="2" >
+                <Button x:Name="button_Mini" Background="{x:Null}" Foreground="White" BorderThickness="0"
+                    Content="▁" ToolTip="最小化程序窗体" Click="Button_Mini_Click"/>
+            </Viewbox>
+            <Viewbox  Margin="10" Grid.Column="3" >
+                <Button x:Name="button_Exit" Background="{x:Null}" Foreground="Red" BorderThickness="0"
+                    Content="X" ToolTip="退出数据导入功能" Click="button_Exit_Click"/>
+            </Viewbox>
+        </Grid>
+
+        <!-- 标题2 -->
+        <Grid Margin="0" Grid.Row="2"  Grid.Column="0" Grid.ColumnSpan="5" >
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="103*"/>
+                    <ColumnDefinition Width="122*"/>
+                    <ColumnDefinition Width="575*"/>
+                </Grid.ColumnDefinitions>
+                <Viewbox Margin="1" Grid.Column="1" HorizontalAlignment="Left" >
+                    <TextBlock Margin="3,4,0,3" Grid.Column="1" Text="请选择档案" Foreground="White" />
+                </Viewbox>
+            </Grid>
+        </Grid>
+
+        <!-- 选择文件 -->
+        <Viewbox Margin="0" Grid.Row="4" Grid.Column="1" HorizontalAlignment="Left">
+            <TextBlock Margin="6" Text="已选文件" Foreground="Black" />
+        </Viewbox>
+        <Grid x:Name="Grid_SelectFile" Margin="0" Grid.Row="4" Grid.RowSpan="4" Grid.Column="2" >
+            <ListBox x:Name="ListBox_SelectFile" Margin="0" 
+                     Width="{Binding ElementName=Grid_SelectFile, Path=ActualWidth}" SelectionMode="Single"  FontSize="11"/>
+        </Grid>
+        <Button x:Name="button_Search" Margin="8" Grid.Row="4" Grid.Column="3" 
+                    Content="搜索文件" FontSize="12" Click="button_Search_Click"/>
+        <Button x:Name="button_Delete" Margin="8" Grid.Row="5" Grid.Column="3" 
+                    Content="移除文件" FontSize="12" Click="Button_Delete_Click"/>
+        <Button x:Name="button_Clear" Margin="8" Grid.Row="6" Grid.Column="3" 
+                    Content="清空全部" FontSize="12" Click="Button_Clear_Click"/>
+
+        <!-- Line -->
+        <Grid Margin="0" Grid.Row="8" Grid.Column="0" Grid.ColumnSpan="5">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="80*"/>
+                <ColumnDefinition Width="641*"/>
+                <ColumnDefinition Width="80*"/>
+            </Grid.ColumnDefinitions>
+            <Grid x:Name="Grid_Line" Grid.Column="1">
+                <Line Grid.Column="1" X1="0" Y1="6" X2 ="{Binding ElementName=Grid_Line, Path=ActualWidth}"  Y2="6" Stroke="Gray" StrokeThickness="1" />
+            </Grid>
+        </Grid>
+
+        <!-- 进度条 -->
+        <Viewbox Margin="0" Grid.Row="9" Grid.Column="1" HorizontalAlignment="Left" >
+            <TextBlock Margin="6" Text="读取进度" Foreground="Black" />
+        </Viewbox>
+        <Grid Margin="0" Grid.Row="9" Grid.Column="2">
+            <ProgressBar x:Name="progressBar_Read"  Grid.Column ="2" Margin="0,10,0,10" 
+                HorizontalAlignment="Stretch" SmallChange="1" LargeChange="0" />
+        </Grid>
+        <Button x:Name="button_Import" Margin="8"  Grid.Row="9" Grid.Column="3"
+                Content="导入文件" FontSize="12" Click="button_Import_Click"/>
+
+        <!-- 导入选项 -->
+        <Viewbox Grid.Row="11"  Grid.RowSpan="1" Grid.Column="1" Margin="0"  HorizontalAlignment="Left">
+            <TextBlock x:Name="TextBlock_ImpotText" Margin="6" Text="导入选项" Foreground="Black" />
+        </Viewbox>
+        <Viewbox Grid.Row="11" Grid.Column="2" Grid.ColumnSpan="2" Grid.RowSpan="1" 
+            Margin="0" HorizontalAlignment="Left" VerticalAlignment="Center">
+            <TextBlock x:Name="TextBlock_Question" Margin="0,6,0,6" 
+                    Text="数据库已存在相同档案编号的档案，请选择：" 
+                    Foreground="Black" 
+                    HorizontalAlignment="Left" />
+        </Viewbox>
+
+        <!-- 处理方法1 -->
+        <Grid Margin="0" Grid.Row="12" Grid.Column="2" Grid.ColumnSpan="2">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="114*"/>
+                <ColumnDefinition Width="10*"/>
+                <ColumnDefinition Width="160*"/>
+                <ColumnDefinition Width="160*"/>
+                <ColumnDefinition Width="160*"/>
+            </Grid.ColumnDefinitions>
+            <Viewbox Grid.Column="0" Margin="0" HorizontalAlignment="Left" VerticalAlignment="Center" >
+                <TextBlock x:Name="TextBlock_FunctionText" Margin="0,6,0,6" Text="处理方法：" Foreground="Black" 
+                        HorizontalAlignment="Left" />
+            </Viewbox>
+            <Viewbox Grid.Column="2" Margin="0,6,0,6" HorizontalAlignment="Left" VerticalAlignment="Center" >
+                <RadioButton x:Name="RadioButton_Cover" Margin="0,1,0,1" 
+                            Content="用新档案覆盖"  ToolTip="用导入的档案信息替换已存在档案的信息"
+                            Foreground="Black" 
+                            HorizontalAlignment="Left" VerticalContentAlignment="Center" GroupName="PatientGroup"/>
+            </Viewbox>
+            <Viewbox Grid.Column="3" Margin="0,6,0,6" HorizontalAlignment="Left" VerticalAlignment="Center" >
+                <RadioButton x:Name="RadioButton_NotCover" Margin="0,1,0,1" 
+                            Content="不用复制" ToolTip="保留已存在的档案信息"
+                            Foreground="Black" 
+                            HorizontalAlignment="Left" VerticalContentAlignment="Center" GroupName="PatientGroup" IsChecked="True"/>
+            </Viewbox>
+            <Viewbox Grid.Column="4" Margin="0,6,0,6" HorizontalAlignment="Left" VerticalAlignment="Center">
+                <RadioButton x:Name="RadioButton_Build" Margin="0,1,0,1" 
+                            Content="另建档案" ToolTip="另建一个新的档案，该档案与现有的某个档案具有相同的“档案编号”"
+                            Foreground="Black" 
+                            HorizontalAlignment="Left" VerticalContentAlignment="Center" GroupName="PatientGroup"/>
+            </Viewbox>
+        </Grid>
+
+        <!-- 检查记录 -->
+        <Grid Margin="0" Grid.Row="13" Grid.Column="2" Grid.ColumnSpan="2">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="114*"/>
+                <ColumnDefinition Width="10*"/>
+                <ColumnDefinition Width="160*"/>
+                <ColumnDefinition Width="160*"/>
+                <ColumnDefinition Width="160*"/>
+            </Grid.ColumnDefinitions>
+            <Viewbox Grid.Column="0" Margin="0" HorizontalAlignment="Left" VerticalAlignment="Center" >
+                <TextBlock x:Name="TextBlock_AfterText" Margin="0,6,0,6" Text="后面同样情况：" Foreground="Black" 
+                        HorizontalAlignment="Left" />
+            </Viewbox>
+            <Viewbox Grid.Column="2" Margin="0,6,0,6" HorizontalAlignment="Left" VerticalAlignment="Center">
+                <RadioButton x:Name="RadioButton_Same" Margin="0,1,0,1" 
+                            Content="用同样方法" ToolTip="后面遇到相同的情况时，按现行选定的方法进行处理，不再提问" 
+                            Foreground="Black" 
+                            HorizontalAlignment="Left" VerticalContentAlignment="Center" GroupName="Group2"/>
+            </Viewbox>
+            <Viewbox Grid.Column="3" Margin="0,6,0,6" HorizontalAlignment="Left" VerticalAlignment="Center">
+                <RadioButton x:Name="RadioButton_Ask" Margin="0,1,0,1" 
+                            Content="再次询问" ToolTip="后面遇到相同的情况时会再次请求处理方式"
+                            Foreground="Black" 
+                            HorizontalAlignment="Left" VerticalContentAlignment="Center" GroupName="Group2" IsChecked="True"/>
+            </Viewbox>
+        </Grid>
+
+        <!-- 按钮 -->
+        <Viewbox Grid.Row="15"  Grid.RowSpan="1" Grid.Column="1" Margin="0"  HorizontalAlignment="Left">
+            <TextBlock x:Name="TextBlock_ButtonText" Margin="6" Text="操作选项" Foreground="Black" />
+        </Viewbox>
+        <Grid Margin="0" Grid.Row="15" Grid.Column="2" Grid.ColumnSpan="2">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="103*"/>
+                <ColumnDefinition Width="150*"/>
+                <ColumnDefinition Width="35*"/>
+                <ColumnDefinition Width="150*"/>
+                <ColumnDefinition Width="116*"/>
+            </Grid.ColumnDefinitions>
+            <Button x:Name="button_Continue" Margin="10,6,10,6" Grid.Column="1" Grid.ColumnSpan="1" 
+                Content="继续处理" ToolTip="选择处理方式后继续执行导入功能" 
+                FontSize="12" Click="button_Continue_Click"/>
+            <Button x:Name="button_Stop" Margin="10,6,3,6" Grid.Column="3" Grid.ColumnSpan="1" 
+                Content="中断处理"  ToolTip="中断执行导入功能" 
+                FontSize="12" Click="Button_Stop_Click"/>
+        </Grid>
+    </Grid>
+</Window>

@@ -1,0 +1,310 @@
+﻿<Window x:Class="OctTools.frm_SearchPatient"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:OctTools"
+        mc:Ignorable="d"
+        Title="frm_SearchPatient" Height="700" Width="1200" WindowStyle="None" 
+        ResizeMode="NoResize" WindowStartupLocation="CenterScreen" 
+        FontSize="8" Loaded="Window_Loaded" AllowsTransparency="True" ShowInTaskbar="False" Activated="Window_Activated" >
+    <Window.Resources>
+        <Style x:Key="EnterButton01" TargetType="Button">
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="{x:Type Button}">
+                        <Grid x:Name="grid_Enter" Margin="0">
+                            <Image Margin="1" Source="Pict/Search.png"/>
+                            <Viewbox Margin="1">
+                                <Label Margin="0" Content="{TemplateBinding Content}" 
+                                       Foreground="White" HorizontalContentAlignment="Center"/>
+                            </Viewbox>
+                        </Grid>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter Property="Background" TargetName="grid_Enter" Value ="#FFA5DBF0"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+    </Window.Resources>
+    <Window.Background>
+        <ImageBrush ImageSource="Pict/SelectPatient05.png"/>
+    </Window.Background>
+    <Grid Margin="0">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="10*"/>
+            <RowDefinition Height="7*"/>
+            <RowDefinition Height="9*"/>
+            <RowDefinition Height="4*"/>
+            <RowDefinition Height="44*"/>
+            <RowDefinition Height="9*"/>
+            <RowDefinition Height="44*"/>
+            <RowDefinition Height="13*"/>
+        </Grid.RowDefinitions>
+
+        <!-- Exit -->
+        <Grid Grid.Row = "1" >
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="220*"/>
+                <ColumnDefinition Width="10*"/>
+                <ColumnDefinition Width="1*"/>
+                <ColumnDefinition Width="10*"/>
+                <ColumnDefinition Width="1*"/>
+                <ColumnDefinition Width="10*"/>
+                <ColumnDefinition Width="16*"/>
+            </Grid.ColumnDefinitions>
+            <Viewbox  Grid.Column="1" Margin="4">
+                <Button x:Name="button_Clear" Background="{x:Null}" Foreground="White" BorderThickness="0"
+                        Content="清空" ToolTip="清空当前的查询结果" 
+                        Click="button_Clear_Click"/>
+            </Viewbox>
+            <Viewbox  Grid.Column="3" Grid.ColumnSpan="1" Margin="0,0,0,3">
+                <Button x:Name="button_Mini" Background="{x:Null}" Foreground="White" BorderThickness="0"
+                        Content="▁" ToolTip="退出选择档案功能" Click="Button_Mini_Click"/>
+            </Viewbox>
+            <Viewbox  Grid.Column="5" Grid.ColumnSpan="1" Margin="2">
+                <Button x:Name="button_Exit" Background="{x:Null}" Foreground="Red" BorderThickness="0"
+                        Content="X" ToolTip="退出选择档案功能" Click="button_Exit_Click"/>
+            </Viewbox>
+        </Grid>
+
+        <!-- 输入信息 -->
+        <Grid x:Name="grid_Input" Grid.Row="2" Margin="0">
+            <Grid  Margin="0">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="40*"/>
+                    <ColumnDefinition Width="33*"/>
+                    <ColumnDefinition Width="2*"/>
+                    <ColumnDefinition Width="24*"/>
+                    <ColumnDefinition Width="141*"/>
+                </Grid.ColumnDefinitions>
+                <Grid Grid.Column="1" Margin="0,8,0,7" >
+                    <Grid.Background>
+                        <ImageBrush ImageSource="Pict/Input02.png"/>
+                    </Grid.Background>
+                    <Grid x:Name="View_Input" Margin="7,5,7,5" 
+                             HorizontalAlignment="Stretch" 
+                             VerticalAlignment="Stretch" 
+                             >
+                        <TextBox x:Name="textBox_Input" Margin="0"  Background="{x:Null}" 
+                            BorderThickness="0"
+                            Foreground="Black" FontSize="14"
+                            Height="{Binding ElementName=View_Input,Path=ActualHeight}"
+                            Width="{Binding ElementName=View_Input,Path=ActualWidth}"
+                            HorizontalAlignment="Stretch" 
+                            HorizontalContentAlignment="Left"
+                            VerticalAlignment="Stretch"
+                            VerticalContentAlignment="Center"
+                            Text="1234567890" 
+                            >
+                        </TextBox>
+                    </Grid>
+                </Grid>
+                <Button x:Name="button_Input" Margin="0" Grid.Column="3" Style="{StaticResource EnterButton01}"  
+                    Content="搜索" ToolTip="按输入条件检索受检者信息" Click="button_Input_Click" 
+                    >
+                </Button>
+                <Grid Margin="0" Grid.Column="4">
+                    <Viewbox Margin="0,4,0,4" HorizontalAlignment="Left" >
+                        <Label  Margin="2,0"  Background="{x:Null}" BorderThickness="0"
+                            HorizontalAlignment="Left" HorizontalContentAlignment="Left" Content="（输入*代表全检索）">
+                        </Label>
+                    </Viewbox>
+                </Grid>
+            </Grid>
+        </Grid>
+
+        <!-- 人员信息 -->
+        <Grid Grid.Row="4" Margin="0">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="40*"/>
+                <ColumnDefinition Width="9*"/>
+                <ColumnDefinition Width="171*"/>
+                <ColumnDefinition Width="20*"/>
+            </Grid.ColumnDefinitions>
+
+            <DataGrid x:Name="datagrid_Patient" Grid.Column="1" Margin="5"  Background="Transparent"
+                      AutoGenerateColumns="False" CanUserAddRows="False" BorderThickness="0"
+                      FontSize="12" ItemsSource="{Binding}" IsReadOnly="True"
+                      CanUserReorderColumns="False" AlternationCount="2"
+                      GridLinesVisibility="None" SelectionChanged="datagrid_Patient_SelectionChanged" Grid.ColumnSpan="2" MouseDoubleClick="Datagrid_Patient_MouseDoubleClick">
+                <DataGrid.ColumnHeaderStyle>
+                    <Style TargetType="{x:Type DataGridColumnHeader}">
+                        <Setter Property="Background" Value="{x:Null}"/>
+                        <Setter Property="Foreground" Value="Black" />
+                        <Setter Property="HorizontalContentAlignment" Value="Center" />
+                        <Setter Property="Height" Value="25"/>
+                    </Style>
+                </DataGrid.ColumnHeaderStyle>
+                <DataGrid.Columns>
+                    <DataGridTextColumn Header="" Binding="{Binding FileID, Mode=OneWay}" Visibility="Hidden"
+                        ElementStyle="{StaticResource DataGridTextColumnCenterSytle}">
+                    </DataGridTextColumn>
+                    <DataGridTextColumn Header="档案编号" Width="100" Binding ="{Binding PatientID, Mode=OneWay}" 
+                                        ElementStyle="{StaticResource DataGridTextColumnCenterSytle}">
+                    </DataGridTextColumn>
+                    <DataGridTextColumn Header="姓名" Width="180" Binding ="{Binding Name, Mode=OneWay}"
+                        ElementStyle="{StaticResource DataGridTextColumnCenterSytle}">
+                    </DataGridTextColumn>
+                    <DataGridTextColumn Header="出生年月" Width="100" Binding ="{Binding Birthday, StringFormat='{}{0:yyyy-MM-dd HH:mm:ss}', Mode=OneWay}"
+                        ElementStyle="{StaticResource DataGridTextColumnCenterSytle}">
+                    </DataGridTextColumn>
+                    <DataGridTextColumn Header="性别" Width="60" Binding ="{Binding Sex, Mode=OneWay}"
+                        ElementStyle="{StaticResource DataGridTextColumnCenterSytle}">
+                    </DataGridTextColumn>
+                    <DataGridTextColumn Header="住址" Width="180" Binding ="{Binding Address, Mode=OneWay}"
+                        ElementStyle="{StaticResource DataGridTextColumnCenterSytle}">
+                    </DataGridTextColumn>
+                    <DataGridTextColumn Header="电话" Width="80" Binding ="{Binding Tele, Mode=OneWay}"
+                        ElementStyle="{StaticResource DataGridTextColumnCenterSytle}">
+                    </DataGridTextColumn>
+
+                    <DataGridTemplateColumn  Header="操作" Width="80">
+                        <DataGridTemplateColumn.CellTemplate>
+                            <DataTemplate>
+                                <Button Content="删改"  Style="{StaticResource EnterButton01}" Click="button_Edit_Click" >
+                                </Button>
+                            </DataTemplate>
+                        </DataGridTemplateColumn.CellTemplate>
+                    </DataGridTemplateColumn>
+
+                    <DataGridTemplateColumn  Header="选择" Width="80">
+                        <DataGridTemplateColumn.CellTemplate>
+                            <DataTemplate>
+                                <Button Content="选择"  Style="{StaticResource EnterButton01}" Click="button_Select_Click" >
+                                </Button>
+                            </DataTemplate>
+                        </DataGridTemplateColumn.CellTemplate>
+                    </DataGridTemplateColumn>                   
+
+                </DataGrid.Columns>
+                <DataGrid.RowStyle>
+                    <Style TargetType="DataGridRow">
+                        <Setter Property="Background" Value="Transparent" />
+                        <Setter Property="Height" Value="30"/>
+                        <Setter Property="Foreground" Value="Black" />
+                        <Setter Property="BorderThickness" Value="0"/>
+                        <Style.Triggers>
+                            <Trigger Property="ItemsControl.AlternationIndex"  Value="0">
+                                <Setter Property="Background" Value="Transparent" />
+                            </Trigger>
+                            <Trigger Property="ItemsControl.AlternationIndex"  Value="1">
+                                <Setter Property="Background" Value="#FFFFFFE1" />
+                            </Trigger>
+                            <Trigger Property="IsSelected" Value="True">
+                                <Setter Property="Foreground" Value="Black"/>
+                                <Setter Property="Background" Value="#1D75B9"/>
+                                <Setter Property="BorderThickness" Value="0"/>
+                            </Trigger>
+                        </Style.Triggers>
+                    </Style>
+                </DataGrid.RowStyle>
+                <DataGrid.CellStyle>
+                    <Style TargetType="DataGridCell">
+                        <Style.Triggers>
+                            <Trigger Property="IsSelected" Value="True">
+                                <Setter Property="Foreground" Value="Black"/>
+                                <Setter Property="Background" Value="#1D75B9"/>
+                                <Setter Property="BorderThickness" Value="0"/>
+                            </Trigger>
+                        </Style.Triggers>
+                    </Style>
+                </DataGrid.CellStyle>
+            </DataGrid>
+        </Grid>
+
+
+        <!-- 诊断信息 -->
+        <Grid Grid.Row="6" Margin="0">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="2*"/>
+                <ColumnDefinition Width="9*"/>
+                <ColumnDefinition/>
+            </Grid.ColumnDefinitions>
+
+            <DataGrid x:Name="datagrid_Record" Grid.Column="1" Margin="5"  Background="Transparent"
+                      AutoGenerateColumns="False" CanUserAddRows="False" BorderThickness="0"
+                      FontSize="12" ItemsSource="{Binding}" IsReadOnly="True"
+                      CanUserReorderColumns="False" AlternationCount="2"
+                      GridLinesVisibility="None" MouseDoubleClick="Datagrid_Record_MouseDoubleClick"  >
+                <DataGrid.ColumnHeaderStyle>
+                    <Style TargetType="{x:Type DataGridColumnHeader}">
+                        <Setter Property="Background" Value="{x:Null}"/>
+                        <Setter Property="Foreground" Value="Black" />
+                        <Setter Property="HorizontalContentAlignment" Value="Center" />
+                        <Setter Property="Height" Value="25"/>
+                    </Style>
+                </DataGrid.ColumnHeaderStyle>
+                <DataGrid.Columns>
+                    <DataGridTextColumn Header="" Binding="{Binding FileID, Mode=OneWay}" Visibility="Hidden"
+                        ElementStyle="{StaticResource DataGridTextColumnCenterSytle}">
+                    </DataGridTextColumn>
+                    <DataGridTextColumn Header="检查时间" Width="150" Binding ="{Binding CheckTime, StringFormat='{}{0:yyyy-MM-dd HH:mm:ss}', Mode=OneWay}" 
+                                        ElementStyle="{StaticResource DataGridTextColumnCenterSytle}">
+                    </DataGridTextColumn>
+                    <DataGridTextColumn Header="医生" Width="150" Binding ="{Binding Doctor, Mode=OneWay}"
+                        ElementStyle="{StaticResource DataGridTextColumnCenterSytle}">
+                    </DataGridTextColumn>
+                    <DataGridTextColumn Header="检查情况" Width="400" Binding ="{Binding CheckInfo, Mode=OneWay}"
+                        ElementStyle="{StaticResource DataGridTextColumnCenterSytle}">
+                    </DataGridTextColumn>
+
+                    <DataGridTemplateColumn  Header="操作" Width="80">
+                        <DataGridTemplateColumn.CellTemplate>
+                            <DataTemplate>
+                                <Button Content="删改"  Style="{StaticResource EnterButton01}" Click="button_RecordEdit_Click" >
+                                </Button>
+                            </DataTemplate>
+                        </DataGridTemplateColumn.CellTemplate>
+                    </DataGridTemplateColumn>
+
+                    <DataGridTemplateColumn  Header="选择" Width="80">
+                        <DataGridTemplateColumn.CellTemplate>
+                            <DataTemplate>
+                                <Button Content="选择"  Style="{StaticResource EnterButton01}" Click="button_RecordSelect_Click" >
+                                </Button>
+                            </DataTemplate>
+                        </DataGridTemplateColumn.CellTemplate>
+                    </DataGridTemplateColumn>
+
+                </DataGrid.Columns>
+                <DataGrid.RowStyle>
+                    <Style TargetType="DataGridRow">
+                        <Setter Property="Background" Value="Transparent" />
+                        <Setter Property="Height" Value="30"/>
+                        <Setter Property="Foreground" Value="Black" />
+                        <Setter Property="BorderThickness" Value="0"/>
+                        <Style.Triggers>
+                            <Trigger Property="ItemsControl.AlternationIndex"  Value="0">
+                                <Setter Property="Background" Value="Transparent" />
+                            </Trigger>
+                            <Trigger Property="ItemsControl.AlternationIndex"  Value="1">
+                                <Setter Property="Background" Value="#FFFFFFE1" />
+                            </Trigger>
+                            <Trigger Property="IsSelected" Value="True">
+                                <Setter Property="Foreground" Value="Black"/>
+                                <Setter Property="Background" Value="#1D75B9"/>
+                                <Setter Property="BorderThickness" Value="0"/>
+                            </Trigger>
+                        </Style.Triggers>
+                    </Style>
+                </DataGrid.RowStyle>
+                <DataGrid.CellStyle>
+                    <Style TargetType="DataGridCell">
+                        <Style.Triggers>
+                            <Trigger Property="IsSelected" Value="True">
+                                <Setter Property="Foreground" Value="Black"/>
+                                <Setter Property="Background" Value="#1D75B9"/>
+                                <Setter Property="BorderThickness" Value="0"/>
+                            </Trigger>
+                        </Style.Triggers>
+                    </Style>
+                </DataGrid.CellStyle>
+            </DataGrid>
+        </Grid>
+
+    </Grid>
+</Window>

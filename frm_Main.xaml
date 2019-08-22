@@ -1,0 +1,810 @@
+﻿<Window x:Class="OctTools.frm_Main"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:OctTools"
+        mc:Ignorable="d"
+        Height="900" Width="1600" FontSize="12" 
+        WindowStartupLocation="CenterScreen" 
+        WindowStyle="None" 
+        Loaded="Window_Loaded" Background="Black" 
+        Title="OCTIS-Tools V1.00" ShowInTaskbar="False">
+    <Window.Resources>
+        <Style x:Key="GreyButton1" TargetType="{x:Type local:MyButton}">
+            <Style.Setters>
+                <Setter Property="BorderThickness" Value="0"/>
+                <Setter Property="Template">
+                    <Setter.Value>
+                        <ControlTemplate TargetType="{x:Type local:MyButton}">
+                            <Grid x:Name="grid_Back" Margin="0" Background="Transparent">
+                                <Image x:Name = "button_Pict" Margin="2" 
+                                       HorizontalAlignment="Center" VerticalAlignment="Center"
+                                       Source="{TemplateBinding ImgSource}" Opacity="1" Stretch="Fill" >
+                                </Image>
+                                <!--//这里把模板中Image控件的source属性Binding到自定义控件的ImgSource属性上。-->
+                                <TextBlock x:Name="textBlock_Text" Margin="0,5,0,0" 
+                                           VerticalAlignment="Center" HorizontalAlignment="Center" 
+                                           Foreground="{TemplateBinding Foreground}"
+                                           FontSize="{TemplateBinding FontSize}"
+                                           Text="{TemplateBinding Content}">
+                                </TextBlock>
+                                <!-- //这里的文本控件直接绑定的是Button的Content内容。 -->
+                            </Grid>
+                            <ControlTemplate.Triggers>
+                                <Trigger Property="IsMouseOver" Value="true">
+                                    <Setter TargetName="grid_Back" Property="Background" Value="Blue" />
+                                    <Setter TargetName="button_Pict" Property="Opacity" Value="1" />
+                                </Trigger>
+                                <Trigger Property="IsPressed" Value="true">
+                                    <Setter TargetName="grid_Back" Property="Background" Value="Blue" />
+                                    <Setter TargetName="button_Pict" Property="Opacity" Value="1" />
+                                </Trigger>
+                                <Trigger Property="IsEnabled" Value="false">
+                                    <Setter TargetName="button_Pict" Property="Opacity" Value="0.4" />
+                                    <Setter TargetName="textBlock_Text" Property="Opacity" Value="0.4" />
+                                </Trigger>
+                            </ControlTemplate.Triggers>
+                        </ControlTemplate>
+                    </Setter.Value>
+                </Setter>
+            </Style.Setters>
+        </Style>
+    </Window.Resources>
+    <Grid>
+        <!-- Logo ========================== -->
+        <Image x:Name="image_Logo" 
+                Width="500" Height="500" Stretch="Uniform"
+                HorizontalAlignment="Center" VerticalAlignment="Center"
+                Source="Pict/YSD-TLOGO.PNG" >
+        </Image>
+
+        <Grid>
+            <!-- 窗体分割 ========================== -->
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="331*"/>
+                <ColumnDefinition Width="11*"/>
+                <ColumnDefinition Width="1176*"/>
+                <ColumnDefinition Width="60*"/>
+                <ColumnDefinition Width="15*"/>
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="22*"/>
+                <RowDefinition Height="236*"/>
+                <RowDefinition Height="473*"/>
+                <RowDefinition Height="10*"/>
+                <RowDefinition Height="28*"/>
+                <RowDefinition Height="10*"/>
+                <RowDefinition Height="110*"/>
+            </Grid.RowDefinitions>
+
+            <!-- 窗口标题 ========================== -->
+            <Grid Grid.Column="0" Grid.ColumnSpan="5" Margin="0">
+                <Grid.Background>
+                    <SolidColorBrush Color="{DynamicResource {x:Static SystemColors.ActiveBorderColorKey}}"/>
+                </Grid.Background>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="140"/>
+                    <ColumnDefinition Width="118*"/>
+                    <ColumnDefinition Width="4*"/>
+                    <ColumnDefinition Width="4*"/>
+                </Grid.ColumnDefinitions>
+                <Image Margin="10,0" Grid.Column="0" Source="Pict/Logo.png" />
+                <Viewbox Grid.Column="1" Margin="1,1,0,1" Width="160" HorizontalAlignment="Left">
+                    <Label x:Name="label_Logo" Margin="0" Content="——  OCTIS-Tools V1.00" 
+                        ScrollViewer.VerticalScrollBarVisibility="Disabled" VerticalContentAlignment="Stretch" >
+                        <Label.Foreground>
+                            <SolidColorBrush Color="{DynamicResource {x:Static SystemColors.DesktopColorKey}}"/>
+                        </Label.Foreground>
+                    </Label>
+                </Viewbox>
+                <Viewbox Margin="0" Grid.Column="2">
+                    <Button x:Name="button_Mini" Margin="3" 
+                            HorizontalAlignment="Center" HorizontalContentAlignment="Center"
+                            VerticalAlignment="Center" VerticalContentAlignment="Center"
+                            ToolTip="最小化窗体" 
+                            Content="—" FontWeight="Bold" 
+                            Background="Transparent" BorderThickness="0"
+                            Foreground="White"
+                            Click="button_Mini_Click">
+                    </Button>
+                </Viewbox>
+                <Viewbox Margin="0" Grid.Column="3">
+                    <Button x:Name="button_Exit" Margin="3" 
+                        HorizontalAlignment="Center" HorizontalContentAlignment="Center"
+                        VerticalAlignment="Center" VerticalContentAlignment="Center"
+                        Background="Transparent" BorderThickness="0"
+                        ToolTip="关闭程序" 
+                        Content="X" FontWeight="Bold" Foreground="Red"
+                        Click="button_Exit_Click" >
+                    </Button>
+                </Viewbox>
+            </Grid>
+
+            <!-- 左边小图 ========================== -->
+            <Grid x:Name="grid_SmallPict" Margin="10" Grid.Row="1">
+                <Image x:Name="image_SmallPict"  Margin="5"
+                       HorizontalAlignment="Left" 
+                       VerticalAlignment="Top" Source="Pict/ScanPict000.PNG" />
+                <Rectangle x:Name="Rectangle_Pict" Margin="0" 
+                      Stroke="#79B9E6" StrokeThickness="1" 
+                      Fill="Transparent"
+                      Width="100" Height="100" 
+                      HorizontalAlignment="Left" VerticalAlignment="Top"
+                      MouseEnter="Rectangle_Pict_MouseEnter" 
+                      MouseLeave="Rectangle_Pict_MouseLeave" 
+                      MouseDown="Rectangle_Pict_MouseDown" 
+                      MouseUp="Rectangle_Pict_MouseUp" 
+                      MouseMove="Rectangle_Pict_MouseMove"  >
+                </Rectangle>
+            </Grid>
+
+            <!-- 左边档案编号 ========================== -->
+            <!--
+            <Grid x:Name="Grid_PatientInfo2" Grid.Row="2" Grid.RowSpan="1" Grid.Column="0" Margin="15,0,15,5"
+                    Background="Transparent" >
+                <Grid Margin="0">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="18*"/>
+                        <RowDefinition Height="38*"/>
+                        <RowDefinition Height="413*"/>
+                    </Grid.RowDefinitions>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="18*"/>
+                        <ColumnDefinition Width="117*"/>
+                        <ColumnDefinition Width="166*"/>
+                    </Grid.ColumnDefinitions>
+                    <local:MyButton x:Name="button_SearchPatient2" Margin="0"
+                                    Grid.Row="1" Grid.RowSpan="1" Grid.Column="1" Grid.ColumnSpan="1"
+                                    Content="检索档案" Foreground="Black"
+                                    Style="{StaticResource GreyButton}"
+                                    ToolTip="选择其他档案" Click="button_SearchPatient_Click" 
+                                    ImgSource = "Pict/button01.png">
+                    </local:MyButton>
+                </Grid>
+            </Grid>         
+            -->
+            
+            <Grid x:Name="Grid_PatientInfo" Grid.Row="2" Grid.RowSpan="5" Grid.Column="0" Margin="15,0,15,5">
+                <Grid.Background>
+                    <ImageBrush ImageSource="Pict/BlueBackground2.png"/>
+                </Grid.Background>
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="50*"/>
+                        <RowDefinition Height="38*"/>
+                        <RowDefinition Height="228*"/>
+                        <RowDefinition Height="313*"/>
+                    </Grid.RowDefinitions>
+                    <Grid Grid.Row="0" Margin="3">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="91*"/>
+                            <ColumnDefinition Width="57*"/>
+                        </Grid.ColumnDefinitions>
+                        <Grid Margin="0">
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="18*"/>
+                                <RowDefinition Height="3*"/>
+                            </Grid.RowDefinitions>
+                            <Label x:Name="textBox_CurrentPatient" Margin="2,2,2,2" Grid.Column="0" BorderThickness="0"
+                                  VerticalContentAlignment="Bottom" FontSize="12"
+                                  Content="档案号：P12345678" Background="{x:Null}"  >
+                                <Label.Foreground>
+                                    <SolidColorBrush Color="{DynamicResource {x:Static SystemColors.ControlLightLightColorKey}}"/>
+                                </Label.Foreground>
+                            </Label>
+                            <Rectangle Margin="1" Height="1" Grid.Row="1" VerticalAlignment="Top">
+                                <Rectangle.Stroke>
+                                    <SolidColorBrush Color="{DynamicResource {x:Static SystemColors.ControlLightLightColorKey}}"/>
+                                </Rectangle.Stroke>
+                            </Rectangle>
+                        </Grid>
+                        
+                        <!--
+                        <Grid  Grid.Column="1" Margin="2,10,2,2">
+                            <local:MyButton x:Name="button_SearchPatient" 
+                                        Content="选择档案"  Foreground="Black"
+                                        Style="{StaticResource GreyButton}"
+                                        ToolTip="选择其他档案" Click="button_SearchPatient_Click" 
+                                        ImgSource = "Pict/button01.png">
+                            </local:MyButton>
+                        </Grid>
+                        -->
+                        <local:MyButton x:Name="button_CheckTime" Grid.Column="3" Grid.ColumnSpan="1" Margin="0" 
+                                Style="{StaticResource GreyButton1}"
+                                ToolTip="选择其它日期的受检记录"  
+                                Foreground="White" Content="2019-03-10"
+                                Background="Transparent"
+                                ImgSource="Pict/Calendar02.png" Click="button_CheckTime_Click" >
+                        </local:MyButton>
+                    </Grid>
+
+                    <Grid Grid.Row="1" Margin="3">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="5*"/>
+                            <ColumnDefinition Width="30*"/>
+                            <ColumnDefinition Width="253*"/>
+                            <ColumnDefinition Width="9*"/>
+                        </Grid.ColumnDefinitions>
+                        <Image x:Name="image_PatientSex" Grid.Column="1" Margin="5" Source="Pict/Person.png"/>
+                        <Label x:Name="label_PatientInfo" Grid.Column="2"  Margin="1" FontSize="12" 
+                               Content="张一二三四五六七  女  43岁" VerticalContentAlignment="Bottom">
+                            <Label.Foreground>
+                                <SolidColorBrush Color="{DynamicResource {x:Static SystemColors.ControlLightLightColorKey}}"/>
+                            </Label.Foreground>
+                        </Label>
+                    </Grid>
+
+                    <ListBox x:Name="listBox_CheckRecord"  Grid.Row ="2" Margin="10,3,10,3" Background="Transparent" BorderThickness="0"
+                             ScrollViewer.HorizontalScrollBarVisibility="Disabled" 
+                             SelectionChanged="listBox_CheckRecord_SelectionChanged" 
+                             MouseDoubleClick="listBox_CheckRecord_MouseDoubleClick" >
+                        <ListBox.ItemsPanel>
+                            <ItemsPanelTemplate>
+                                <WrapPanel IsItemsHost="True"/>
+                            </ItemsPanelTemplate>
+                        </ListBox.ItemsPanel>
+                        <ListBox.ItemTemplate>
+                            <DataTemplate>
+                                <Canvas Margin="3"  Width="50" Height="74">
+                                    <Image x:Name="SmPict" Margin="0" Width="50" Height="50" Source="{Binding Path=SmallPict}" />
+                                    <Image x:Name="TiPict" Margin="40,0,0,40" Width="10" Height="10" Source="{Binding Path=SelectPict}"/>
+                                    <Label x:Name="TimeText" Margin="0,52,0,3" Width="50" Content="{Binding Path = CheckTime}" FontSize="10">
+                                        <Label.Foreground>
+                                            <SolidColorBrush Color="{DynamicResource {x:Static SystemColors.ControlLightLightColorKey}}"/>
+                                        </Label.Foreground>
+                                    </Label>
+                                </Canvas>
+                            </DataTemplate>
+                        </ListBox.ItemTemplate>
+                        <ListBoxItem >
+                            <Canvas Margin="3"  Width="50" Height="74">
+                                <Image x:Name="SmPict" Margin="0" Width="50" Height="50" Source="Pict/ScanPict000.PNG" />
+                                <Image x:Name="TiPict" Margin="40,0,0,40" Width="10" Height="10" Source="Pict/Ti.PNG"/>
+                                <Label x:Name="TimeText" Margin="0,52,0,3" Width="50" Content="24:30:30" FontSize="10">
+                                    <Label.Foreground>
+                                        <SolidColorBrush Color="{DynamicResource {x:Static SystemColors.ControlLightLightColorKey}}"/>
+                                    </Label.Foreground>
+                                </Label>
+                            </Canvas>
+                        </ListBoxItem>
+                    </ListBox>
+
+                    <ListBox x:Name="listBox_SelectDate"  Grid.Row ="1"  Grid.RowSpan="2"
+                             Margin="160,3,10,3" 
+                             Background="#FF396D8B" BorderThickness="1"
+                             ScrollViewer.HorizontalScrollBarVisibility="Disabled" 
+                             MouseDoubleClick="listBox_SelectDate_MouseDoubleClick"
+                             Visibility="Visible" SelectionMode="Single" >
+                        <ListBox.ItemContainerStyle>
+                            <Style TargetType="ListBoxItem">
+                                <Setter Property="Background" Value="#FF396D8B"/>
+                                <Setter Property="Foreground" Value="White"/>
+                                <Style.Triggers>
+                                    <Trigger Property="IsMouseOver" Value="true">
+                                        <Setter Property="Background" Value="DeepSkyBlue"/>
+                                        <Setter Property="Foreground" Value="White"/>
+                                    </Trigger>
+                                    <Trigger Property="IsSelected" Value="true">
+                                        <Setter Property="Background" Value="Blue"/>
+                                        <Setter Property="Foreground" Value="Yellow"/>
+                                    </Trigger>
+                                </Style.Triggers>
+                            </Style>
+                        </ListBox.ItemContainerStyle>
+                    </ListBox>
+                    <GroupBox x:Name="groupBox_CheckInfo" Grid.Row="3" Margin="10,0,10,10" Foreground="White" FontSize="16" Header="诊断情况" >
+                        <Grid Margin="3">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="109*"/>
+                                <ColumnDefinition Width="18*"/>
+                            </Grid.ColumnDefinitions>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="34*"/>
+                                <RowDefinition Height="237*"/>
+                            </Grid.RowDefinitions>
+                            <Label x:Name="label_CheckInfo" Margin="10,0,0,0" Content="王医生  15:30" FontSize="12" VerticalContentAlignment="Bottom">
+                                <Label.Foreground>
+                                    <SolidColorBrush Color="{DynamicResource {x:Static SystemColors.ControlLightLightColorKey}}"/>
+                                </Label.Foreground>
+                            </Label>
+                            <Button x:Name="button_CheckInFoEdit" Margin="2" Grid.Row="0" Grid.Column="1" Width="20" 
+                                    HorizontalAlignment="Center" VerticalAlignment="Center" 
+                                    BorderThickness="0" BorderBrush="{x:Null}" 
+                                    Foreground="{x:Null}" Height="20" ToolTip="修改诊断记录" Click="button_CheckInFoEdit_Click" >
+                                <Button.OpacityMask>
+                                    <ImageBrush ImageSource="Pict/Edit01.png"/>
+                                </Button.OpacityMask>
+                                <Button.Background>
+                                    <ImageBrush ImageSource="Pict/Edit01.png" Stretch="Uniform"/>
+                                </Button.Background>
+                            </Button>
+                            <Border CornerRadius="5" Margin="5,10,5,5" Grid.Row="1" 
+                                    BorderThickness="1" BorderBrush="#FF396D8B" Background="#FF396D8B" Height="Auto" Grid.ColumnSpan="2" >
+                                <TextBox Name="textBox_CheckInfo" Margin="8" Background="Transparent" TextWrapping="Wrap" BorderThickness="0"
+                                            IsReadOnly="True" SelectionLength="1" AcceptsReturn="True"
+                                            Text="ABCD" Height="Auto" VerticalScrollBarVisibility="Auto" >
+                                    <TextBlock.Foreground>
+                                        <SolidColorBrush Color="{DynamicResource {x:Static SystemColors.ScrollBarColorKey}}"/>
+                                    </TextBlock.Foreground>
+                                </TextBox>
+                            </Border>
+                        </Grid>
+                    </GroupBox>
+                </Grid>
+            </Grid>
+
+
+            <!-- Big Picture 左边标尺 ========================== -->
+            <Canvas x:Name="canvas_BigPictLeftRule"  Grid.Row="1" Grid.RowSpan="3" Grid.Column="1" Margin="0" >
+                <Line X1="0" Y1="0" X2="0" Y2="{Binding ElementName=canvas_BigPictLeftRule, Path=ActualHeight}" Stroke="#FF696969" StrokeThickness ="2">
+                </Line>
+            </Canvas>
+
+
+            <!-- Big Picture 下边标尺 ========================== -->
+            <Canvas x:Name="canvas_BigPictBottomRule"  Grid.Row="3" Grid.RowSpan="1" Grid.Column="1" Grid.ColumnSpan="3" Margin="0">
+                <Line X1="0" Y1="{Binding ElementName=canvas_BigPictBottomRule, Path=ActualHeight}" 
+                      X2="{Binding ElementName=canvas_BigPictBottomRule, Path=ActualWidth}" Y2="{Binding ElementName=canvas_BigPictBottomRule, Path=ActualHeight}" Stroke="#FF696969" StrokeThickness ="2"/>
+            </Canvas>
+
+
+
+            <!-- 扫描图像 ========================== -->
+            <Grid x:Name="grid_BigPict" Grid.Row="1" Grid.RowSpan="2" Grid.Column="2" Margin="5" >
+                <Canvas x:Name="Canvas_BigPict1" ClipToBounds="true" Margin="0">
+                    <Canvas x:Name="Canvas_BigPict2" Margin="0" >
+                        <Image x:Name="image_BigPict" Margin="0"
+                               Width="{Binding ElementName=Canvas_BigPict1,Path=ActualWidth}" 
+                               Height="{Binding ElementName=Canvas_BigPict1,Path=ActualHeight}"
+                               HorizontalAlignment="Left" VerticalAlignment="Top"
+                               Source="Pict/ScanPict000.PNG" 
+                               MouseWheel="image_BigPict_MouseWheel" 
+                               MouseLeftButtonDown="image_BigPict_MouseLeftButtonDown" 
+                               MouseLeftButtonUp="image_BigPict_MouseLeftButtonUp"
+                               MouseMove="image_BigPict_MouseMove" 
+                               />
+                        <Line x:Name="Line_CutLine_0" 
+                              X1="{Binding ElementName=image_BigPict,Path=Margin.Left}" 
+                              Y1="{Binding ElementName=image_BigPict,Path=Margin.Top}" 
+                              X2="{Binding ElementName=image_BigPict,Path=ActualWidth}"
+                              Y2="{Binding ElementName=image_BigPict,Path=ActualHeight}"
+                              Stroke="Red" StrokeThickness ="1" 
+                              MouseEnter="Line_CutLine_0_MouseEnter" 
+                              MouseLeave="Line_CutLine_0_MouseLeave" MouseDown="Line_CutLine_0_MouseDown" MouseUp="Line_CutLine_0_MouseUp" MouseMove="Line_CutLine_0_MouseMove" />
+                        <Line x:Name="Line_CutLine_1" 
+                              X1="{Binding ElementName=image_BigPict,Path=Margin.Left}" 
+                              Y1="{Binding ElementName=image_BigPict,Path=ActualHeight}" 
+                              X2="{Binding ElementName=image_BigPict,Path=ActualWidth}"
+                              Y2="{Binding ElementName=image_BigPict,Path=Margin.Top}"
+                              Stroke="#79B9E6" StrokeThickness ="1" MouseEnter="Line_CutLine_0_MouseEnter" MouseLeave="Line_CutLine_0_MouseLeave" MouseDown="Line_CutLine_0_MouseDown" MouseMove="Line_CutLine_0_MouseMove" MouseUp="Line_CutLine_0_MouseUp" />
+                        <Canvas.RenderTransform>
+                            <TransformGroup>
+                                <ScaleTransform x:Name="sfr"/>
+                                <TranslateTransform x:Name="translater"/>
+                            </TransformGroup>
+                        </Canvas.RenderTransform>
+                    </Canvas>
+                </Canvas>
+                <Button x:Name="button_Zoom" Margin="0,0,10,40"  Width="35"  Height="35" 
+                        VerticalAlignment="Bottom" 
+                        HorizontalAlignment="Right" 
+                        BorderThickness="0"   Background="White"
+                        ToolTip="打开或关闭图像放大功能" 
+                        Click="button_Zoom_Click" >
+                    <Button.OpacityMask>
+                        <ImageBrush ImageSource="Pict/Zoom.png"/>
+                    </Button.OpacityMask>
+                </Button>
+
+            </Grid>
+
+
+            <!-- 右面按钮 ========================== -->
+            <StackPanel x:Name="StackPanel_RightIcon" Grid.Row="1" Grid.RowSpan="2" Grid.Column="3"  >
+                <!--
+                <local:MyButton x:Name="button_Import" Margin="15,10,0,10"   
+                                Style="{StaticResource GreyButton}"
+                                HorizontalAlignment="Right"
+                                VerticalAlignment="Top" 
+                                BorderThickness="0" 
+                                ToolTip="从磁盘导入新的数据" 
+                                Click="button_Import_Click"
+                                ImgSource="Pict/Inport01.png" >
+                </local:MyButton>
+                -->
+                
+                <local:MyButton x:Name="button_Output" Margin="15,10,0,10" 
+                                Style="{StaticResource GreyButton1}"
+                                HorizontalAlignment="Right"
+                                VerticalAlignment="Top" 
+                                BorderThickness="0" 
+                                ToolTip="把指定的档案文件导出到其它存储设备"
+                                ImgSource="Pict/Outport02.png">
+                </local:MyButton>
+                <local:MyButton x:Name="button_Detect" Margin="15,10,0,10"  
+                                Style="{StaticResource GreyButton}"
+                                HorizontalAlignment="Right"
+                                VerticalAlignment="Top" 
+                                BorderThickness="0" 
+                                ToolTip="对图像位置进行测量，包括位置、距离和面积" 
+                                ImgSource="Pict/Detect.png" Click="Button_Detect_Click">
+                </local:MyButton>
+
+                <local:MyButton x:Name="button_SavePict" Margin="15,10,0,10" 
+                                Style="{StaticResource GreyButton}"
+                                HorizontalAlignment="Right"
+                                VerticalAlignment="Top" 
+                                BorderThickness="0" 
+                                ToolTip="把当前扫描图像另存为通用格式的图像文件" 
+                                ImgSource="Pict/Jpg01.png" Click="button_SavePict_Click">
+                </local:MyButton>
+
+                <local:MyButton x:Name="button_Compare" Margin="15,10,0,10"  
+                                Style="{StaticResource GreyButton}"
+                                HorizontalAlignment="Right"
+                                VerticalAlignment="Top" 
+                                BorderThickness="0" 
+                                ToolTip="比较图像" 
+                                Click="button_Compare_Click" 
+                                ImgSource="Pict/Picture04.png">
+                </local:MyButton>
+
+                <local:MyButton x:Name="button_Bright" Margin="15,10,0,10"   
+                                Style="{StaticResource GreyButton}"
+                                HorizontalAlignment="Right"
+                                VerticalAlignment="Top" 
+                                BorderThickness="0" 
+                                ToolTip="图像亮度、对比度、光滑度的调整" 
+                                ImgSource="Pict/Adjust.png" Click="button_Bright_Click" >
+                </local:MyButton>
+
+                <local:MyButton x:Name="button_Color" Margin="15,10,0,10"   
+                                Style="{StaticResource GreyButton}"
+                                VerticalAlignment="Top" 
+                                HorizontalAlignment="Right"
+                                BorderThickness="0" 
+                                ToolTip="选择图像色彩" 
+                                ImgSource="Pict/Color.png" Click="button_Color_Click" >
+                </local:MyButton>
+
+                <local:MyButton x:Name="button_Speed" Margin="15,10,0,10"   
+                                Style="{StaticResource GreyButton}"
+                                HorizontalAlignment="Right"
+                                VerticalAlignment="Top" 
+                                BorderThickness="0" 
+                                ToolTip="播放速度调整" 
+                                ImgSource="Pict/Speed01.png" Click="button_Speed_Click" >
+                </local:MyButton>
+
+                
+
+
+
+                <!-- >
+                <local:MyButton x:Name="button_Setup" Margin="15,10,0,10"   
+                                Style="{StaticResource GreyButton}"
+                                HorizontalAlignment="Right"
+                                VerticalAlignment="Top" 
+                                BorderThickness="0" 
+                                ToolTip="设置运行参数" 
+                                ImgSource="Pict/Setup03.png" 
+                                Click="button_Setup_Click" >
+                </local:MyButton>
+                <local:MyButton x:Name="button_Exit01" Margin="15,10,0,10"  
+                            Style="{StaticResource GreyButton}"
+                            HorizontalAlignment="Right"
+                            VerticalAlignment="Top" 
+                            BorderThickness="0" 
+                            ToolTip="退出程序" Click="button_Exit_Click" 
+                            ImgSource="Pict/Exit.png">
+                </local:MyButton>
+                < -->
+            </StackPanel>            
+
+            <!-- 录像播放控制 ========================== -->
+            <Grid x:Name="grid_Control" Grid.Row="4" Grid.Column="1" Grid.ColumnSpan="3" Margin="0">
+                <Grid.Background>
+                    <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+                        <GradientStop Color="Black" Offset="0"/>
+                        <GradientStop Color="{DynamicResource {x:Static SystemColors.ActiveBorderColorKey}}" Offset="1"/>
+                    </LinearGradientBrush>
+                </Grid.Background>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="406*"/>
+                    <ColumnDefinition Width="5*"/>
+                    <ColumnDefinition Width="81*"/>
+                    <ColumnDefinition Width="5*"/>
+                    <ColumnDefinition Width="81*"/>
+                    <ColumnDefinition Width="5*"/>
+                    <ColumnDefinition Width="81*"/>
+                    <ColumnDefinition Width="5*"/>
+                    <ColumnDefinition Width="80*"/>
+                    <ColumnDefinition Width="5*"/>
+                    <ColumnDefinition Width="81*"/>
+                    <ColumnDefinition Width="5*"/>
+                    <ColumnDefinition Width="171*"/>
+                    <ColumnDefinition Width="235*"/>
+                </Grid.ColumnDefinitions>
+                <Rectangle Margin="2,5,2,1" Width="1" Grid.Column="1" HorizontalAlignment="Center">
+                    <Rectangle.Stroke>
+                        <SolidColorBrush Color="{DynamicResource {x:Static SystemColors.ControlLightLightColorKey}}"/>
+                    </Rectangle.Stroke>
+                </Rectangle>
+                <Button x:Name="button_First" Margin="7" Grid.Column="2"
+                        HorizontalAlignment="Stretch" HorizontalContentAlignment="Center"
+                        VerticalAlignment="Stretch" VerticalContentAlignment="Center"
+                        BorderThickness="0" ToolTip="返回到第一帧" 
+                        Click="button_First_Click" >
+                    <Button.OpacityMask>
+                        <ImageBrush ImageSource="Pict/First.png" Stretch="Uniform"/>
+                    </Button.OpacityMask>
+                </Button>
+
+                <Rectangle Margin="2,5,2,1" Width="1" Grid.Column="3" HorizontalAlignment="Center">
+                    <Rectangle.Stroke>
+                        <SolidColorBrush Color="{DynamicResource {x:Static SystemColors.ControlLightLightColorKey}}"/>
+                    </Rectangle.Stroke>
+                </Rectangle>
+                <Button x:Name="button_Back" Margin="7" Grid.Column="4"
+                        HorizontalAlignment="Stretch" HorizontalContentAlignment="Center"
+                        VerticalAlignment="Stretch" VerticalContentAlignment="Center"
+                        BorderThickness="0" ToolTip="返回一帧" 
+                        Click="button_Back_Click" >
+                    <Button.OpacityMask>
+                        <ImageBrush ImageSource="Pict/Left.png" Stretch="Uniform"/>
+                    </Button.OpacityMask>
+                </Button>
+
+                <Rectangle Margin="2,5,2,1" Width="1" Grid.Column="5" HorizontalAlignment="Center">
+                    <Rectangle.Stroke>
+                        <SolidColorBrush Color="{DynamicResource {x:Static SystemColors.ControlLightLightColorKey}}"/>
+                    </Rectangle.Stroke>
+                </Rectangle>
+                <Button x:Name="button_Play" Margin="7" Grid.Column="6" 
+                        HorizontalAlignment="Stretch" HorizontalContentAlignment="Center"
+                        VerticalAlignment="Stretch" VerticalContentAlignment="Center"
+                        BorderThickness="0" ToolTip="播放/Play" 
+                        Click="button_Play_Click" >
+                    <Button.OpacityMask>
+                        <ImageBrush ImageSource="Pict/Play.png" Stretch="Uniform"/>
+                    </Button.OpacityMask>
+                </Button>
+                <Button x:Name="button_Pause" Margin="7" Grid.Column="6" 
+                        HorizontalAlignment="Stretch" HorizontalContentAlignment="Center"
+                        VerticalAlignment="Stretch" VerticalContentAlignment="Center"
+                        BorderThickness="0" ToolTip="暂停/Pause" 
+                        Click="button_Pause_Click" >
+                    <Button.OpacityMask>
+                        <ImageBrush ImageSource="Pict/Pause.png" Stretch="Uniform"/>
+                    </Button.OpacityMask>
+                </Button>
+
+                <Rectangle Margin="2,5,2,1" Width="1" Grid.Column="7" HorizontalAlignment="Center">
+                    <Rectangle.Stroke>
+                        <SolidColorBrush Color="{DynamicResource {x:Static SystemColors.ControlLightLightColorKey}}"/>
+                    </Rectangle.Stroke>
+                </Rectangle>
+                <Button x:Name="button_Right" Margin="7" Grid.Column="8" 
+                        HorizontalAlignment="Stretch" HorizontalContentAlignment="Center"
+                        VerticalAlignment="Stretch" VerticalContentAlignment="Center"
+                        BorderThickness="0" ToolTip="前进一帧" 
+                        Click="button_Right_Click" >
+                    <Button.OpacityMask>
+                        <ImageBrush ImageSource="Pict/Right.png"  Stretch="Uniform"/>
+                    </Button.OpacityMask>
+                </Button>
+
+                <Rectangle Margin="2,5,2,1" Width="1" Grid.Column="9" HorizontalAlignment="Center">
+                    <Rectangle.Stroke>
+                        <SolidColorBrush Color="{DynamicResource {x:Static SystemColors.ControlLightLightColorKey}}"/>
+                    </Rectangle.Stroke>
+                </Rectangle>
+                <Button x:Name="button_End" Margin="7" Grid.Column="10" 
+                        HorizontalAlignment="Stretch" HorizontalContentAlignment="Center"
+                        VerticalAlignment="Stretch" VerticalContentAlignment="Center"
+                        BorderThickness="0" ToolTip="前进到最后一帧" 
+                        Click="button_End_Click">
+                    <Button.OpacityMask>
+                        <ImageBrush ImageSource="Pict/End.png" Stretch="Uniform"/>
+                    </Button.OpacityMask>
+                </Button>
+                <Rectangle Margin="2,5,2,1" Width="1" Grid.Column="11" HorizontalAlignment="Center">
+                    <Rectangle.Stroke>
+                        <SolidColorBrush Color="{DynamicResource {x:Static SystemColors.ControlLightLightColorKey}}"/>
+                    </Rectangle.Stroke>
+                </Rectangle>
+
+                <Viewbox Margin="0" Grid.Column="13" HorizontalAlignment="Left" VerticalAlignment="Center">
+                    <Label x:Name="FrameInfo" Foreground ="White" Content="位置：第 10 帧 / 共 100 帧" />
+                </Viewbox>
+                <Button x:Name="Button_Mark" Margin="0,0,15,0"  Grid.Column="13" 
+                    HorizontalAlignment="Right" VerticalAlignment="Center"
+                    Width ="{Binding ElementName=grid_Control, Path=ActualHeight}" 
+                    Height="{Binding ElementName=grid_Control, Path=ActualHeight}"  
+                    BorderThickness="0"
+                    Click="Button_Mark_Click" >
+                    <Button.Background>
+                        <ImageBrush ImageSource="Pict/Mark01.png" Stretch="Uniform"/>
+                    </Button.Background>
+                    <Button.OpacityMask>
+                        <ImageBrush ImageSource="Pict/Mark01.png" Stretch="Uniform"/>
+                    </Button.OpacityMask>
+                </Button>
+                <Button x:Name="Button_UnMark" Margin="0,0,15,0"  Grid.Column="13" 
+                    HorizontalAlignment="Right" VerticalAlignment="Center"
+                    Width ="{Binding ElementName=grid_Control, Path=ActualHeight}" 
+                    Height="{Binding ElementName=grid_Control, Path=ActualHeight}" 
+                    BorderThickness="0"
+                    Click="Button_Mark_Click" >
+                    <Button.Background>
+                        <ImageBrush ImageSource="Pict/Mark05.png" Stretch="Uniform"/>
+                    </Button.Background>
+                    <Button.OpacityMask>
+                        <ImageBrush ImageSource="Pict/Mark05.png" Stretch="Uniform"/>
+                    </Button.OpacityMask>
+                </Button>
+
+                <Button x:Name="Button_Save" Margin="0,0,30,0"  Grid.Column="12" 
+                    HorizontalAlignment="Right" VerticalAlignment="Center"               
+                    Width ="{Binding ElementName=grid_Control, Path=ActualHeight}" 
+                    Height="{Binding ElementName=grid_Control, Path=ActualHeight}" 
+                    BorderThickness="0"
+                    Click="button_Save_Click" >
+                    <Button.Background>
+                        <ImageBrush ImageSource="Pict/jp.png" Stretch="Uniform"/>
+                    </Button.Background>                    
+                    <Button.OpacityMask>
+                        <ImageBrush ImageSource="Pict/jp.png" Stretch="Uniform"/>
+                    </Button.OpacityMask>
+                </Button>
+                
+                
+
+
+
+            </Grid>
+
+            <!-- Record 左面标尺 ========================== -->
+            <Canvas x:Name="canvas_RecordLeftRule"  Grid.Row="5" Grid.RowSpan="2" Grid.Column="1" Margin="0" >
+                <Line X1="0" Y1="0" X2="0" Y2="{Binding ElementName=canvas_RecordLeftRule, Path=ActualHeight}" Stroke="#FF696969" StrokeThickness ="2"/>
+            </Canvas>
+
+            <!-- Record 顶部标尺 ========================== -->
+            <Canvas x:Name="canvas_RecordBottomRule"  Grid.Row="5" Grid.RowSpan="1" Grid.Column="1" Grid.ColumnSpan="3" Margin="0" >
+                <Line X1="0" Y1="0" X2="{Binding ElementName=canvas_RecordBottomRule, Path=ActualWidth}" Y2="0" Stroke="#FF696969" StrokeThickness ="2"/>
+            </Canvas>
+            <Grid  x:Name="Grid_FramePos" Grid.Row="5" Grid.RowSpan="1" Grid.Column="1" Grid.ColumnSpan="3" 
+                   Margin="0" Background="Transparent" 
+                   MouseDown="Grid_FramePos_MouseDown">
+                <Image x:Name="image_FramePos" Width="10" Height="10" 
+                       Margin="820,0,0,0" Stretch="Uniform"
+                       Source="Pict/DownArrow01.ico" 
+                       HorizontalAlignment="Left" VerticalAlignment="Top"
+                       ScrollViewer.VerticalScrollBarVisibility="Disabled" 
+                       MouseEnter="image_FramePos_MouseEnter" 
+                       MouseDown="image_FramePos_MouseDown" 
+                       MouseUp="image_FramePos_MouseUp" 
+                       MouseMove="image_FramePos_MouseMove">
+                </Image>
+            </Grid>
+
+            <!-- 录像带 ========================== -->
+            <Grid x:Name="Grid_Record" Grid.Row="6" Grid.Column="2" Grid.ColumnSpan="2">
+                <Image x:Name="image_Record" Margin="0" 
+                       HorizontalAlignment="Left" VerticalAlignment="Top" 
+                       Source="Pict/Record.png" 
+                       Stretch="Fill" StretchDirection="DownOnly" 
+                       MouseDown="image_Record_MouseDown" >
+                </Image>
+                <Line x:Name="line_FramePos" X1="100" Y1="0" X2="100" Y2="{Binding ElementName=image_Record, Path=ActualHeight}" 
+                      Stroke="#79B9E6" StrokeThickness ="2"
+                      MouseEnter="Line_FramePos_MouseEnter">
+                </Line> 
+            </Grid>
+
+        </Grid>
+
+        <Popup Name="Pop_Detect" StaysOpen="True" Placement="Right" 
+                   Width="350" Height="280" 
+                   AllowsTransparency="True" 
+                   PopupAnimation="Fade"
+                   PlacementTarget = "{Binding ElementName=canvas_BigPictLeftRule}"
+                   HorizontalOffset="0"
+                   VerticalOffset="0" >
+            <Grid>
+                <local:UserControl_Detect x:Name="UserControl_Detect" Margin="0"
+                   HorizontalAlignment="Left"
+                   VerticalAlignment="Top"
+                   Detect_Button_Exit_MouseClick ="Detect_Button_Exit_Click" 
+                   Detect_Button_Clear_MouseClick ="Detect_Button_Clear_Click"
+                   Detect_RadioButton_Change ="Detect_RadioButton_Line_Change">
+                </local:UserControl_Detect>
+            </Grid>
+        </Popup>
+        
+        <Popup Name="Pop_Color" StaysOpen="False" Placement="Left" 
+                   Width="330" Height="170" 
+                   AllowsTransparency="True" 
+                   PopupAnimation="Fade"
+                   PlacementTarget = "{Binding ElementName=button_Color}"
+                   HorizontalOffset="-5"
+                   VerticalOffset="0" >
+            <Grid>
+                <local:UserControl_Color x:Name="UserControl_Color" Margin="0"
+                   HorizontalAlignment="Left"
+                   VerticalAlignment="Top"
+                   Color_MouseDoubleClick ="listBox_Color_MouseDoubleClick" >
+                </local:UserControl_Color>
+            </Grid>
+        </Popup>
+
+        <Popup Name="Pop_Brightness" StaysOpen="False" Placement="Left" 
+                   Width="350" Height="300" 
+                   AllowsTransparency="True" 
+                   PopupAnimation="Fade"
+                   PlacementTarget = "{Binding ElementName=button_Bright}"
+                   HorizontalOffset="-5"
+                   VerticalOffset="0" >
+            <Grid>
+                <local:UserControl_Bright x:Name="UserControl_Bright" Margin="0"
+                       HorizontalAlignment="Left" VerticalAlignment="Top"
+                       BrightDec_Click="button_BrightDec_Click" 
+                       BrightAdd_Click="button_BrightAdd_Click" 
+                       BrightSlide_MouseDown="image_BrightSlide_MouseDown"  
+                       BrightSlide_MouseUp="image_BrightSlide_MouseUp"
+                       BrightSlide_MouseMove="image_BrightSlide_MouseMove"
+                       >
+                </local:UserControl_Bright>
+            </Grid>
+        </Popup>
+
+        <Popup Name="Pop_Speed" StaysOpen="False" Placement="Left" 
+                   Width="350" Height="300" 
+                   AllowsTransparency="True" 
+                   PopupAnimation="Fade"
+                   PlacementTarget = "{Binding ElementName=button_Speed}"
+                   HorizontalOffset="-5"
+                   VerticalOffset="0" >
+            <Grid>
+                <local:UserControl_Speed x:Name="UserControl_Speed" Margin="0"
+                   HorizontalAlignment="Left"
+                   VerticalAlignment="Top"
+                   FrameDec_Click="button_FrameDec_Click" 
+                   FrameAdd_Click="button_FrameAdd_Click" 
+                   FrameSlide_MouseDown="image_FrameSlide_MouseDown"  
+                   FrameSlide_MouseUp="image_FrameSlide_MouseUp"
+                   FrameSlide_MouseMove="image_FrameSlide_MouseMove"
+                   >
+                </local:UserControl_Speed>
+            </Grid>
+        </Popup>
+
+        <Popup Name="Pop_ReadFileBar" StaysOpen="True" Placement="Center"
+                   Width="600" Height="150" 
+                   AllowsTransparency="False" 
+                   PopupAnimation="Fade">
+            <Grid>
+                <local:UserControl_ReadFileBar x:Name="UserControl_ReadFileBar" Margin="0"
+                                               >
+                </local:UserControl_ReadFileBar>
+            </Grid>
+        </Popup>
+
+        <Popup Name="Pop_Setup" StaysOpen="False" Placement="Left" 
+                   Width="350" Height="300" 
+                   AllowsTransparency="True" 
+                   PopupAnimation="Fade"
+                   PlacementTarget = "{Binding ElementName=button_Setup}"
+                   HorizontalOffset="-5"
+                   VerticalOffset="0" >
+            <Grid>
+                <local:UserControl_Setup x:Name="UserControl_Setup" Margin="0"
+                   HorizontalAlignment="Left"
+                   VerticalAlignment="Top"
+                   >
+                </local:UserControl_Setup>
+            </Grid>
+        </Popup>
+    </Grid>
+</Window>
